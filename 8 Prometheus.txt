@@ -1,0 +1,96 @@
+Step 1: Download Prometheus for Windows
+Go to the official Prometheus download page:
+Prometheus Downloads
+
+Open:
+C:\prometheus\prometheus.yml
+Open it with Notepad and replace its contents with:
+
+global:
+  scrape_interval: 5s
+
+scrape_configs:
+
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]
+
+  - job_name: "python-app"
+    static_configs:
+      - targets: ["localhost:8000"]
+
+  - job_name: "windows"
+    static_configs:
+      - targets: ["localhost:9182"]
+
+cmd
+mkdir C:\monitoring-app
+cd C:\monitoring-app
+python -m venv venv
+venv\Scripts\activate
+pip install flask prometheus-client
+pip list
+
+Create app.py
+from flask import Flask
+from prometheus_client import Counter, start_http_server
+
+app = Flask(__name__)
+
+# Count API requests
+REQUEST_COUNT = Counter(
+    "api_requests_total",
+    "Total number of API requests"
+)
+
+@app.route("/")
+def home():
+    REQUEST_COUNT.inc()
+    return "Hello! Flask application is running."
+
+@app.route("/hello")
+def hello():
+    REQUEST_COUNT.inc()
+    return "Hello from the monitoring application!"
+
+if __name__ == "__main__":
+
+    # Prometheus metrics server
+    start_http_server(8000)
+
+    # Flask application
+    app.run(host="0.0.0.0", port=5000)
+
+cmd
+cd C:\monitoring-app
+venv\Scripts\activate
+python app.py
+
+new cmd
+cd C:\prometheus
+prometheus.exe --config.file=prometheus.yml
+
+Visit browser and check output
+
+Download Grafana from chrome
+start Grafana
+In Grafana:
+Connections
+↓
+Data sources
+↓
+Add data source
+↓
+
+
+
+
+Prometheus
+For URL enter:
+http://localhost:9090
+save it
+
+
+
+
+

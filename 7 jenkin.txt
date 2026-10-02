@@ -1,0 +1,114 @@
+1. Install Java
+cmd:
+java -version
+
+2. Install Git
+git --version
+
+3. Install Jenkins
+1. Run the Jenkins installer.
+2. Keep the default installation location.
+3. Select LocalSystem if asked about the service account.
+4. Select the Java installation.
+5. Keep the default Jenkins port, usually:
+
+4. Open Jenkins on chrome
+Jenkins will ask for an initial administrator password.
+cmd:
+C:\ProgramData\Jenkins\.jenkins\secrets\initialAdminPassword
+
+5. Install Jenkins plugins
+Install suggested plugins
+
+on desktop create: flask-jenkins-demo
+in vs create: app.py
+
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return "Hello from Flask CI/CD!"
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
+ 
+create requirements.txt:
+
+Flask
+pytest
+
+create test_app.py:
+from app import app
+
+def test_home():
+    client = app.test_client()
+
+    response = client.get("/")
+
+    assert response.status_code == 200
+    assert response.data == b"Hello from Flask CI/CD!"
+
+cmd:
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+pytest
+python app.py
+
+
+Create a new repository on GitHub, for example:
+flask-jenkins-demo
+
+on vs terminal:
+git init
+git add .
+git commit -m "flask"
+git branch -M main
+git remote add origin YOUR_GITHUB_REPOSITORY_URL
+git push -u origin main
+
+Go to:
+Jenkins Dashboard
+↓
+New Item
+Flask-CI-CD
+
+Pipeline script:
+pipeline {
+    agent any
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                git branch: 'main',
+                    url: 'YOUR_GITHUB_REPOSITORY_URL'
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                bat 'python -m pip install -r requirements.txt'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                bat 'pytest'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                bat 'echo Application deployed successfully'
+            }
+        }
+    }
+}
+
+
+
+
+
