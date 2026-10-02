@@ -1,0 +1,20 @@
+VS Code terminal
+cd Desktop
+mkdir Git_Practical
+cd Git_Practical
+code .
+
+ Create Python File: hello.py
+print("hello git!")
+
+
+New README.md
+write....
+
+git init
+git status
+git add .
+git config --global user.name "your name"
+git config --global user.email "your email"
+git commit -m "python project initial"
+git log

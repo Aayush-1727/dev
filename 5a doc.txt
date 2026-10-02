@@ -1,0 +1,93 @@
+## Step 1: Install Docker Desktop
+
+1. Install Docker Desktop.
+2. Open Docker Desktop.
+3. Wait until Docker Engine shows **Running**.
+
+## Step 2: Verify Docker
+
+Open Cmd:
+```
+docker --version
+docker info
+```
+
+## Step 3: Create Project Folder
+
+Create:
+
+```
+Flask_Project
+```
+
+Open that folder in VS Code.
+
+## Step 4: Create Flask Application
+
+Create a file named:app.py
+
+Add:
+
+```
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return "Welcome to Dockerized Flask Application"
+
+@app.route("/about")
+def about():
+    return "Docker Practical"
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
+```
+Open the terminal:
+
+```
+python -m venv venv
+venv\Scripts\activate
+pip install flask
+python app.py
+```
+
+Open the browser and visit:
+
+```
+http://localhost:5000
+```
+## Step 6: Create requirements.txt
+
+Run:
+```
+pip freeze > requirements.txt
+pip list
+```
+## Step 7: Create Dockerfile
+Create a file named: Dockerfile
+Add:
+```
+FROM python:3.12-slim
+
+WORKDIR /app
+
+COPY requirements.txt .
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+EXPOSE 5000
+
+CMD ["python", "app.py"]
+```
+## Step 8: Build Docker Image
+
+In the terminal:
+
+```
+docker build -t flask-app .
+docker images
+```

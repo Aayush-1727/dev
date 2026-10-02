@@ -1,0 +1,18 @@
+Open the Project Folder
+terminal:
+docker images
+docker build -t flask-app .
+docker run -d -p 5000:5000 flask-app
+docker ps
+
+Open any web browser, check op
+
+for 5c
+same folder open terminal:
+docker images
+docker login after this press enter 2 times
+sign in and login
+
+docker info
+docker tag flask-app nikhita123/flask-app:latest
+docker push nikhita123/flask-app:latest

@@ -1,0 +1,41 @@
+Step 1: Open VMware Workstation
+1. Launch VMware Workstation.
+2. Select your Ubuntu Virtual Machine.
+3. Click Power On.
+
+2: Log in to Ubuntu
+Enter your Ubuntu username and password.
+
+Open the Terminal and run:
+sudo apt update
+sudo apt upgrade -y
+sudo apt install python3 python3-pip -y
+pip3 install flask
+pip3 show flask
+ip addr
+
+1. Shut down the VM.
+2. In VMware, select the VM.
+3. Go to VM → Settings → Network Adapter.
+4. Choose NAT (or Bridged, if required).
+
+ping google.com
+sudo ss -tuln
+sudo ufw allow 5000
+sudo ufw status
+mkdir FlaskApp
+cd FlaskApp
+
+Create app.py:
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return "Hello from Ubuntu Virtual Machine!"
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
+
+python3 app.py
